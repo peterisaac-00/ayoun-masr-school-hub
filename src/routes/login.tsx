@@ -7,16 +7,16 @@ import { Logo } from "@/components/Logo";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Login | Ayoun Masr School Portal" },
+      { title: "تسجيل الدخول | بوابة مدرسة عيون مصر" },
       {
         name: "description",
         content:
-          "Sign in to the Ayoun Masr School portal as a student, parent or administrator to view schedules, grades and reports.",
+          "سجّل الدخول إلى بوابة مدرسة عيون مصر كطالب أو ولي أمر أو مدير لعرض الجداول والدرجات والتقارير.",
       },
-      { property: "og:title", content: "Login | Ayoun Masr School Portal" },
+      { property: "og:title", content: "تسجيل الدخول | بوابة مدرسة عيون مصر" },
       {
         property: "og:description",
-        content: "Access the Ayoun Masr School portal for students, parents and administrators.",
+        content: "الوصول إلى بوابة مدرسة عيون مصر للطلاب وأولياء الأمور والإدارة.",
       },
     ],
   }),
@@ -28,13 +28,13 @@ function LoginPage() {
   const [role, setRole] = useState<"parent" | "admin">("parent");
 
   const roles = [
-    { key: "parent" as const, label: "Student / Parent", icon: Users, hint: "parent@ayounmasr.edu.eg" },
-    { key: "admin" as const, label: "Admin", icon: ShieldCheck, hint: "admin@ayounmasr.edu.eg" },
+    { key: "parent" as const, label: "طالب / ولي أمر", icon: Users, hint: "parent@ayounmasr.edu.eg" },
+    { key: "admin" as const, label: "إدارة", icon: ShieldCheck, hint: "admin@ayounmasr.edu.eg" },
   ];
   const current = roles.find((r) => r.key === role)!;
 
   return (
-    <div className="flex min-h-screen flex-col bg-brand-soft/60 font-sans">
+    <div className="flex min-h-screen flex-col bg-brand-soft/60 font-arabic">
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
           <Link to="/">
@@ -45,9 +45,9 @@ function LoginPage() {
 
       <main className="flex flex-1 items-center justify-center px-6 py-12">
         <div className="w-full max-w-md rounded-xl border border-border bg-card p-7 shadow-card">
-          <h1 className="text-center text-2xl font-extrabold text-brand">Portal Login</h1>
+          <h1 className="text-center text-2xl font-extrabold text-brand">تسجيل الدخول</h1>
           <p className="mt-1 text-center text-sm text-muted-foreground">
-            Select your account type to continue
+            اختر نوع حسابك للمتابعة
           </p>
 
           <div className="mt-6 grid grid-cols-2 gap-3">
@@ -76,24 +76,26 @@ function LoginPage() {
           >
             <div>
               <label className="text-xs font-bold text-foreground" htmlFor="email">
-                Email
+                البريد الإلكتروني
               </label>
               <input
                 id="email"
                 type="email"
                 defaultValue={current.hint}
                 key={current.hint}
+                dir="ltr"
                 className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-brand"
               />
             </div>
             <div>
               <label className="text-xs font-bold text-foreground" htmlFor="password">
-                Password
+                كلمة المرور
               </label>
               <input
                 id="password"
                 type="password"
                 defaultValue="demo1234"
+                dir="ltr"
                 className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm outline-none focus:border-brand"
               />
             </div>
@@ -101,17 +103,17 @@ function LoginPage() {
               type="submit"
               className="w-full rounded-lg bg-brand py-3 text-sm font-bold text-white transition-colors hover:bg-brand-dark"
             >
-              Login as {current.label}
+              الدخول كـ {current.label}
             </button>
             <p className="text-center text-xs text-muted-foreground">
-              Demo prototype — any credentials will sign you in.
+              نموذج تجريبي — أي بيانات دخول ستعمل.
             </p>
           </form>
         </div>
       </main>
 
       <footer className="border-t border-border bg-card px-6 py-5 text-center text-sm text-muted-foreground">
-        © 2025 Ayoun Masr School. All rights reserved.
+        © ٢٠٢٥ مدرسة عيون مصر. جميع الحقوق محفوظة.
       </footer>
     </div>
   );

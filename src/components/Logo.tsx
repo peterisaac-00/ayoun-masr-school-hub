@@ -15,9 +15,11 @@ export function Logo({ variant = "dark" }: { variant?: "dark" | "light" }) {
         <div
           className={`text-lg font-extrabold tracking-tight ${isLight ? "text-white" : "text-brand"}`}
         >
-          Ayoun Masr
+          عيون مصر
         </div>
-        <div className="font-arabic text-base font-bold text-gold">عيون مصر</div>
+        <div className={`text-xs font-semibold ${isLight ? "text-white/70" : "text-muted-foreground"}`}>
+          مدرسة عيون مصر
+        </div>
       </div>
     </div>
   );

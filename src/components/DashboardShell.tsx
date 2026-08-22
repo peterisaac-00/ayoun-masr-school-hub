@@ -1,14 +1,18 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { ChevronDown, ChevronRight, LogOut } from "lucide-react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { ChevronDown, ChevronLeft, LogOut } from "lucide-react";
 import type { ComponentType, ReactNode } from "react";
 
 import { Logo } from "./Logo";
 
-export type NavItem = { label: string; icon: ComponentType<{ className?: string }>; sub?: boolean };
+export type NavItem = {
+  label: string;
+  icon: ComponentType<{ className?: string }>;
+  to: string;
+  sub?: boolean;
+};
 
 export function DashboardShell({
   items,
-  activeLabel,
   title,
   userRole,
   userName,
@@ -16,7 +20,6 @@ export function DashboardShell({
   children,
 }: {
   items: NavItem[];
-  activeLabel: string;
   title?: string;
   userRole: string;
   userName: string;
@@ -24,21 +27,28 @@ export function DashboardShell({
   children: ReactNode;
 }) {
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  const isActive = (to: string) => {
+    if (to === "/dashboard" || to === "/admin") return pathname === to;
+    return pathname === to || pathname.startsWith(`${to}/`);
+  };
 
   return (
-    <div className="flex min-h-screen bg-brand-soft/60">
-      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col bg-brand px-4 py-6 lg:flex">
+    <div className="flex min-h-screen bg-brand-soft/60 font-arabic">
+      <aside className="fixed inset-y-0 right-0 hidden w-64 flex-col bg-brand px-4 py-6 lg:flex">
         <div className="px-2">
           <Logo variant="light" />
         </div>
         <nav className="mt-8 flex-1 space-y-1">
           {items.map((item) => {
-            const active = item.label === activeLabel;
+            const active = isActive(item.to);
             const Icon = item.icon;
             return (
-              <div
-                key={item.label}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-semibold transition-colors ${
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-semibold transition-colors ${
                   active
                     ? "bg-gold text-brand-dark"
                     : "text-white/85 hover:bg-brand-light/50 hover:text-white"
@@ -46,8 +56,8 @@ export function DashboardShell({
               >
                 <Icon className="h-5 w-5" />
                 <span className="flex-1">{item.label}</span>
-                {item.sub ? <ChevronRight className="h-4 w-4 opacity-70" /> : null}
-              </div>
+                {item.sub ? <ChevronLeft className="h-4 w-4 opacity-70" /> : null}
+              </Link>
             );
           })}
         </nav>
@@ -56,11 +66,11 @@ export function DashboardShell({
           className="mt-6 flex items-center gap-3 border-t border-white/15 px-4 pt-5 text-[15px] font-semibold text-white/85 transition-colors hover:text-gold"
         >
           <LogOut className="h-5 w-5" />
-          Logout
+          تسجيل الخروج
         </button>
       </aside>
 
-      <div className="flex min-h-screen flex-1 flex-col lg:ml-64">
+      <div className="flex min-h-screen flex-1 flex-col lg:mr-64">
         <header className="flex items-center justify-between gap-4 border-b border-border bg-card px-6 py-4">
           <Link to="/" className="lg:hidden">
             <Logo />
@@ -91,7 +101,7 @@ export function DashboardShell({
         <main className="flex-1 p-6">{children}</main>
 
         <footer className="border-t border-border bg-card px-6 py-5 text-center text-sm text-muted-foreground">
-          © 2025 Ayoun Masr School. All rights reserved.
+          © ٢٠٢٥ مدرسة عيون مصر. جميع الحقوق محفوظة.
         </footer>
       </div>
     </div>
@@ -114,9 +124,7 @@ export function Panel({
   children: ReactNode;
 }) {
   return (
-    <section
-      className={`rounded-xl border border-border bg-card p-5 shadow-card ${className}`}
-    >
+    <section className={`rounded-xl border border-border bg-card p-5 shadow-card ${className}`}>
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Icon className={`h-5 w-5 ${iconTone === "gold" ? "text-gold" : "text-brand"}`} />
@@ -126,5 +134,62 @@ export function Panel({
       </div>
       {children}
     </section>
+  );
+}
+
+export function GradesTable({ rows }: { rows: string[][] }) {
+  return (
+    <div className="overflow-hidden rounded-md border border-border">
+      <table className="w-full table-fixed text-xs">
+        <thead>
+          <tr className="bg-brand text-white">
+            <th className="px-2 py-2 text-right font-bold">المادة</th>
+            <th className="w-16 px-2 py-2 text-center font-bold">التقدير</th>
+            <th className="w-24 px-2 py-2 text-left font-bold">النسبة</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([subject, grade, pct]) => (
+            <tr key={subject} className="border-t border-border">
+              <td className="px-2 py-2 text-foreground">{subject}</td>
+              <td className="px-2 py-2 text-center font-semibold text-foreground">{grade}</td>
+              <td className="px-2 py-2 text-left font-semibold text-foreground">{pct}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export function StatusBadge({
+  status,
+  variant = "default",
+}: {
+  status: string;
+  variant?: "default" | "success" | "danger" | "gold" | "muted";
+}) {
+  const classes = {
+    default: "border-brand text-brand",
+    success: "border-success text-success bg-success-soft",
+    danger: "border-danger text-danger bg-danger/10",
+    gold: "border-gold text-gold bg-gold-soft",
+    muted: "border-border text-muted-foreground bg-secondary",
+  };
+  return (
+    <span
+      className={`rounded border px-2 py-1 text-xs font-semibold ${classes[variant] ?? classes.default}`}
+    >
+      {status}
+    </span>
+  );
+}
+
+export function PageHeader({ title, description }: { title: string; description?: string }) {
+  return (
+    <div className="mb-6">
+      <h2 className="text-2xl font-extrabold text-brand">{title}</h2>
+      {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
+    </div>
   );
 }
