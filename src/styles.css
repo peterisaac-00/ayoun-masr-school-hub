@@ -78,7 +78,19 @@
 
 :root {
   --radius: 0.625rem;
+  --brand: oklch(0.4 0.15 262);
+  --brand-dark: oklch(0.33 0.14 262);
+  --brand-light: oklch(0.52 0.16 262);
+  --brand-soft: oklch(0.96 0.02 262);
+  --gold: oklch(0.82 0.16 84);
+  --gold-soft: oklch(0.97 0.04 90);
+  --success: oklch(0.55 0.15 155);
+  --success-soft: oklch(0.97 0.03 155);
+  --danger: oklch(0.55 0.21 27);
+  --violet: oklch(0.5 0.22 290);
+  --violet-soft: oklch(0.96 0.03 290);
   --background: oklch(1 0 0);
+
   --foreground: oklch(0.129 0.042 264.695);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.129 0.042 264.695);
