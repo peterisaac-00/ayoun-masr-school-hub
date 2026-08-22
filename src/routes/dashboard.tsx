@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Activity,
+  PersonStanding,
+  Volleyball,
   CalendarCheck,
   CalendarDays,
   CreditCard,
@@ -91,20 +93,20 @@ const term2 = [
 function GradesTable({ rows }: { rows: string[][] }) {
   return (
     <div className="overflow-hidden rounded-md border border-border">
-      <table className="w-full text-sm">
+      <table className="w-full table-fixed text-xs">
         <thead>
           <tr className="bg-brand text-white">
-            <th className="px-3 py-2 text-left font-bold">Subject</th>
-            <th className="px-3 py-2 text-center font-bold">Grade</th>
-            <th className="px-3 py-2 text-right font-bold">Percentage</th>
+            <th className="px-2 py-2 text-left font-bold">Subject</th>
+            <th className="w-16 px-2 py-2 text-center font-bold">Grade</th>
+            <th className="w-24 px-2 py-2 text-right font-bold">Percentage</th>
           </tr>
         </thead>
         <tbody>
           {rows.map(([subject, grade, pct]) => (
             <tr key={subject} className="border-t border-border">
-              <td className="px-3 py-2 text-foreground">{subject}</td>
-              <td className="px-3 py-2 text-center font-semibold text-foreground">{grade}</td>
-              <td className="px-3 py-2 text-right font-semibold text-foreground">{pct}</td>
+              <td className="px-2 py-2 text-foreground">{subject}</td>
+              <td className="px-2 py-2 text-center font-semibold text-foreground">{grade}</td>
+              <td className="px-2 py-2 text-right font-semibold text-foreground">{pct}</td>
             </tr>
           ))}
         </tbody>
@@ -169,7 +171,7 @@ function StudentDashboard() {
                         {row.map((cell, i) => (
                           <td
                             key={i}
-                            className={`px-3 py-2 ${i === 0 ? "text-muted-foreground" : "text-foreground"}`}
+                            className={`whitespace-nowrap px-3 py-2 ${i === 0 ? "text-muted-foreground" : "text-foreground"}`}
                           >
                             {cell}
                           </td>
@@ -210,8 +212,8 @@ function StudentDashboard() {
             <Panel icon={Sparkles} title="Summer Activities" iconTone="gold">
               <div className="grid grid-cols-2 gap-4 text-center">
                 {[
-                  { name: "Karate", icon: Activity },
-                  { name: "Football", icon: Activity },
+                  { name: "Karate", icon: PersonStanding },
+                  { name: "Football", icon: Volleyball },
                 ].map(({ name, icon: Icon }) => (
                   <div key={name}>
                     <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-brand-soft">

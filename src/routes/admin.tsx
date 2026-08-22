@@ -17,10 +17,11 @@ import {
   UserCog,
 } from "lucide-react";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
+  LabelList,
   Cell,
-  Line,
-  LineChart,
   Pie,
   PieChart,
   ResponsiveContainer,
@@ -278,7 +279,7 @@ function AdminDashboard() {
         <Panel icon={Users} title="Attendance Trend" action={<Filter label="This Week" />}>
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={attendanceData} margin={{ top: 16, right: 12, left: 0, bottom: 0 }}>
+              <AreaChart data={attendanceData} margin={{ top: 24, right: 16, left: 0, bottom: 0 }}>
                 <CartesianGrid stroke="var(--border)" vertical={false} />
                 <XAxis
                   dataKey="day"
@@ -295,14 +296,24 @@ function AdminDashboard() {
                   tickLine={false}
                 />
                 <Tooltip formatter={(v: number) => `${v}%`} />
-                <Line
+                <Area
                   type="linear"
                   dataKey="value"
                   stroke="var(--brand)"
                   strokeWidth={2}
+                  fill="var(--brand-soft)"
                   dot={{ r: 4, fill: "white", stroke: "var(--brand)", strokeWidth: 2 }}
-                />
-              </LineChart>
+                  activeDot={{ r: 5 }}
+                >
+                  <LabelList
+                    dataKey="value"
+                    position="top"
+                    offset={10}
+                    formatter={(v: number) => `${v}%`}
+                    style={{ fontSize: 12, fontWeight: 700, fill: "var(--brand)" }}
+                  />
+                </Area>
+              </AreaChart>
             </ResponsiveContainer>
           </div>
           <div className="mt-2 text-sm font-semibold text-foreground">
