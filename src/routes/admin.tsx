@@ -197,17 +197,17 @@ function AdminDashboard() {
         {stats.map(({ label, value, delta, icon: Icon, tone }) => (
           <div
             key={label}
-            className={`rounded-xl border border-border p-5 shadow-card ${toneClasses[tone].card}`}
+            className={`rounded-xl border border-border p-5 shadow-card ${toneClasses[tone]!.card}`}
           >
             <div className="flex items-center gap-4">
               <span
-                className={`flex h-12 w-12 items-center justify-center rounded-xl ${toneClasses[tone].badge}`}
+                className={`flex h-12 w-12 items-center justify-center rounded-xl ${toneClasses[tone]!.badge}`}
               >
                 <Icon className="h-6 w-6 text-white" />
               </span>
               <div>
                 <div className="text-sm font-semibold text-foreground">{label}</div>
-                <div className={`text-3xl font-extrabold ${toneClasses[tone].value}`}>{value}</div>
+                <div className={`text-3xl font-extrabold ${toneClasses[tone]!.value}`}>{value}</div>
               </div>
             </div>
             <div className="mt-3 text-xs font-semibold text-success">{delta} ↑</div>
@@ -329,7 +329,7 @@ function AdminDashboard() {
                     <td className="px-3 py-3">
                       <div className="flex items-center gap-2 font-semibold text-foreground">
                         <span
-                          className={`flex h-7 w-7 items-center justify-center rounded-full ${toneClasses[tone].badge}`}
+                          className={`flex h-7 w-7 items-center justify-center rounded-full ${toneClasses[tone]!.badge}`}
                         >
                           <Icon className="h-4 w-4 text-white" />
                         </span>
@@ -340,7 +340,7 @@ function AdminDashboard() {
                     <td className="px-3 py-3 text-muted-foreground">{when}</td>
                     <td className="px-3 py-3">
                       <span
-                        className={`rounded px-2 py-1 text-xs font-semibold ${byToneClasses[byTone]}`}
+                        className={`rounded px-2 py-1 text-xs font-semibold ${byToneClasses[byTone]!}`}
                       >
                         {by}
                       </span>
