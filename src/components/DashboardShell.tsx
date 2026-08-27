@@ -1,8 +1,10 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, ChevronLeft, LogOut } from "lucide-react";
+import { ChevronDown, ChevronLeft, LogOut, Menu } from "lucide-react";
+import { useState } from "react";
 import type { ComponentType, ReactNode } from "react";
 
 import { Logo } from "./Logo";
+import { Sheet, SheetContent, SheetTitle } from "./ui/sheet";
 
 export type NavItem = {
   label: string;
@@ -28,11 +30,37 @@ export function DashboardShell({
 }) {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const isActive = (to: string) => {
     if (to === "/dashboard" || to === "/admin") return pathname === to;
     return pathname === to || pathname.startsWith(`${to}/`);
   };
+
+  const navLinks = (onNavigate?: () => void) => (
+    <>
+      {items.map((item) => {
+        const active = isActive(item.to);
+        const Icon = item.icon;
+        return (
+          <Link
+            key={item.to}
+            to={item.to}
+            onClick={onNavigate}
+            className={`flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-semibold transition-colors ${
+              active
+                ? "bg-gold text-brand-dark"
+                : "text-white/85 hover:bg-brand-light/50 hover:text-white"
+            }`}
+          >
+            <Icon className="h-5 w-5" />
+            <span className="flex-1">{item.label}</span>
+            {item.sub ? <ChevronLeft className="h-4 w-4 opacity-70" /> : null}
+          </Link>
+        );
+      })}
+    </>
+  );
 
   return (
     <div className="flex min-h-screen bg-brand-soft/60 font-arabic">
@@ -40,27 +68,7 @@ export function DashboardShell({
         <div className="px-2">
           <Logo variant="light" />
         </div>
-        <nav className="mt-8 flex-1 space-y-1">
-          {items.map((item) => {
-            const active = isActive(item.to);
-            const Icon = item.icon;
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`flex items-center gap-3 rounded-lg px-4 py-3 text-[15px] font-semibold transition-colors ${
-                  active
-                    ? "bg-gold text-brand-dark"
-                    : "text-white/85 hover:bg-brand-light/50 hover:text-white"
-                }`}
-              >
-                <Icon className="h-5 w-5" />
-                <span className="flex-1">{item.label}</span>
-                {item.sub ? <ChevronLeft className="h-4 w-4 opacity-70" /> : null}
-              </Link>
-            );
-          })}
-        </nav>
+        <nav className="mt-8 flex-1 space-y-1">{navLinks()}</nav>
         <button
           onClick={() => navigate({ to: "/", replace: true })}
           className="mt-6 flex items-center gap-3 border-t border-white/15 px-4 pt-5 text-[15px] font-semibold text-white/85 transition-colors hover:text-gold"
@@ -72,9 +80,18 @@ export function DashboardShell({
 
       <div className="flex min-h-screen flex-1 flex-col lg:mr-64">
         <header className="flex items-center justify-between gap-4 border-b border-border bg-card px-6 py-4">
-          <Link to="/" className="lg:hidden">
-            <Logo />
-          </Link>
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="rounded-lg p-2 text-brand hover:bg-brand-soft"
+              aria-label="فتح القائمة"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
+            <Link to="/">
+              <Logo />
+            </Link>
+          </div>
           {title ? (
             <h1 className="hidden flex-1 text-center text-2xl font-extrabold text-brand lg:block">
               {title}
@@ -104,6 +121,23 @@ export function DashboardShell({
           © ٢٠٢٥ مدرسة عيون مصر. جميع الحقوق محفوظة.
         </footer>
       </div>
+
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <SheetContent side="right" className="flex w-64 flex-col border-0 bg-brand p-4 font-arabic">
+          <SheetTitle className="sr-only">القائمة</SheetTitle>
+          <div className="px-2 pt-2">
+            <Logo variant="light" />
+          </div>
+          <nav className="mt-8 flex-1 space-y-1">{navLinks(() => setMobileOpen(false))}</nav>
+          <button
+            onClick={() => navigate({ to: "/", replace: true })}
+            className="mt-6 flex items-center gap-3 border-t border-white/15 px-4 pt-5 text-[15px] font-semibold text-white/85 transition-colors hover:text-gold"
+          >
+            <LogOut className="h-5 w-5" />
+            تسجيل الخروج
+          </button>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
